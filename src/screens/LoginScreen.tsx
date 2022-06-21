@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
-import { RootStackParamList } from '../../App'
+import { RootStackParamList } from '../routes'
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
