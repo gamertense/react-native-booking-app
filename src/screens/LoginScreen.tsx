@@ -1,13 +1,8 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import axios from 'axios'
 import React, { useState } from 'react'
-import {
-  Button,
-  Colors,
-  Incubator,
-  LoaderScreen,
-  View,
-} from 'react-native-ui-lib' //eslint-disable-line
+import Spinner from 'react-native-loading-spinner-overlay'
+import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
 import { RootStackParamList } from '../routes'
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
@@ -41,6 +36,7 @@ function LoginScreen({ navigation }: LoginScreenProps) {
   return (
     <View flex padding-s5>
       <TextField
+        testID="email"
         placeholder={'Email'}
         floatingPlaceholder
         onChangeText={(value) => setEmail(value)}
@@ -50,6 +46,7 @@ function LoginScreen({ navigation }: LoginScreenProps) {
         autoCapitalize="none"
       />
       <TextField
+        testID="password"
         placeholder={'Password'}
         floatingPlaceholder
         onChangeText={(value) => setPassword(value)}
@@ -59,8 +56,9 @@ function LoginScreen({ navigation }: LoginScreenProps) {
         secureTextEntry
       />
       <View paddingT-s5></View>
-      {isLoading && <LoaderScreen color={Colors.grey40} />}
+      {isLoading && <Spinner visible={isLoading} />}
       <Button
+        testID="loginButton"
         label={'Login'}
         size={Button.sizes.medium}
         backgroundColor={Colors.green30}
