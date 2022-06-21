@@ -7,7 +7,7 @@ import { RootStackParamList } from '../routes'
 
 const { TextField } = Incubator
 
-const baseUrl = 'http://localhost:8080/api'
+const baseUrl = 'http://192.168.1.38:8080/api'
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
