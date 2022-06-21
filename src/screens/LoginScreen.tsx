@@ -1,15 +1,41 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
-import React from 'react'
-import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
+import axios from 'axios'
+import React, { useState } from 'react'
+import {
+  Button,
+  Colors,
+  Incubator,
+  LoaderScreen,
+  View,
+} from 'react-native-ui-lib' //eslint-disable-line
 import { RootStackParamList } from '../routes'
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
 const { TextField } = Incubator
 
+const baseUrl = 'http://localhost:8080/api'
+
 function LoginScreen({ navigation }: LoginScreenProps) {
-  function handleLogin() {
-    navigation.navigate('Home')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleLogin() {
+    setIsLoading(true)
+
+    try {
+      await axios.post(`${baseUrl}/login`, {
+        email,
+        password,
+      })
+      navigation.navigate('Home')
+    } catch (error) {
+      console.error(error)
+      setEmail('')
+      setPassword('')
+    }
+    setIsLoading(false)
   }
 
   return (
@@ -17,20 +43,23 @@ function LoginScreen({ navigation }: LoginScreenProps) {
       <TextField
         placeholder={'Email'}
         floatingPlaceholder
-        onChangeText={() => console.log('changed')}
+        onChangeText={(value) => setEmail(value)}
         enableErrors
         validate={['required', 'email']}
         validationMessage={['Field is required', 'Email is invalid']}
+        autoCapitalize="none"
       />
       <TextField
         placeholder={'Password'}
         floatingPlaceholder
-        onChangeText={() => console.log('changed')}
+        onChangeText={(value) => setPassword(value)}
         enableErrors
         validate={['required', 'email']}
         validationMessage={['Field is required', 'Email is invalid']}
+        secureTextEntry
       />
       <View paddingT-s5></View>
+      {isLoading && <LoaderScreen color={Colors.grey40} />}
       <Button
         label={'Login'}
         size={Button.sizes.medium}
