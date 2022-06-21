@@ -5,11 +5,11 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
 import { RootStackParamList } from '../routes'
 
-type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
-
 const { TextField } = Incubator
 
 const baseUrl = 'http://localhost:8080/api'
+
+type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
 function LoginScreen({ navigation }: LoginScreenProps) {
   const [email, setEmail] = useState('')
@@ -56,7 +56,9 @@ function LoginScreen({ navigation }: LoginScreenProps) {
         secureTextEntry
       />
       <View paddingT-s5></View>
+
       {isLoading && <Spinner visible={isLoading} />}
+
       <Button
         testID="loginButton"
         label={'Login'}
