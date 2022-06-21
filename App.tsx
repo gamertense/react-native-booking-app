@@ -8,61 +8,27 @@
  * @format
  */
 
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  useColorScheme,
-} from 'react-native'
-import DateTimePicker from 'react-native-ui-lib/src/components/dateTimePicker'
+import { HomeScreen, LoginScreen } from './src/screens'
 
-import { Colors, Header } from 'react-native/Libraries/NewAppScreen'
-
-const App = () => {
-  const isDarkMode = useColorScheme() === 'dark'
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  }
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}
-      >
-        <Header />
-        <DateTimePicker
-          title={'Select time'}
-          placeholder={'Placeholder'}
-          mode={'time'}
-        />
-      </ScrollView>
-    </SafeAreaView>
-  )
+export type RootStackParamList = {
+  Login: undefined
+  Home: undefined
 }
 
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-})
+const RootStack = createStackNavigator<RootStackParamList>()
+
+const App = () => {
+  return (
+    <NavigationContainer>
+      <RootStack.Navigator initialRouteName="Login">
+        <RootStack.Screen name="Login" component={LoginScreen} />
+        <RootStack.Screen name="Home" component={HomeScreen} />
+      </RootStack.Navigator>
+    </NavigationContainer>
+  )
+}
 
 export default App
