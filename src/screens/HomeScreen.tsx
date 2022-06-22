@@ -3,6 +3,8 @@ import axios from 'axios'
 import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { Alert } from 'react-native'
+
+import Spinner from 'react-native-loading-spinner-overlay'
 import {
   Button,
   Colors,
@@ -22,7 +24,7 @@ interface AvailableRoomResponse {
   id: string
 }
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
+type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 function HomeScreen({ navigation }: HomeScreenProps) {
   const [numPeople, setNumPeople] = useState(0)
@@ -76,6 +78,8 @@ function HomeScreen({ navigation }: HomeScreenProps) {
 
   return (
     <View padding-s5>
+      {isLoading && <Spinner visible={isLoading} />}
+
       <Text text60>Fill in details</Text>
 
       <View paddingT-s5></View>
