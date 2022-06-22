@@ -26,10 +26,8 @@ function LoginScreen({ navigation }: LoginScreenProps) {
         email,
         password,
       })
-      navigation.navigate('Home')
     } catch (err: any) {
       console.error(err)
-      setIsLoading(false)
 
       if (axios.isAxiosError(err) && err.response) {
         const responseData = err?.response?.data as ErrorResponseBody
@@ -39,6 +37,8 @@ function LoginScreen({ navigation }: LoginScreenProps) {
         ])
       }
     }
+    setIsLoading(false)
+    navigation.navigate('Home')
   }
 
   return (
