@@ -1,13 +1,15 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import axios from 'axios'
 import React, { useState } from 'react'
+import { Alert } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
 import { RootStackParamList } from '../routes'
+import { ErrorResponseBody } from '../types/error-response'
 
 const { TextField } = Incubator
 
-const baseUrl = 'http://192.168.1.38:8080/api'
+const baseUrl = 'http://localhost:8080/api'
 
 type LoginScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
@@ -25,12 +27,18 @@ function LoginScreen({ navigation }: LoginScreenProps) {
         password,
       })
       navigation.navigate('Home')
-    } catch (error) {
-      console.error(error)
-      setEmail('')
-      setPassword('')
+    } catch (err: any) {
+      console.error(err)
+      setIsLoading(false)
+
+      if (axios.isAxiosError(err) && err.response) {
+        const responseData = err?.response?.data as ErrorResponseBody
+        console.debug(responseData)
+        Alert.alert('Error!', responseData.message, [
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ])
+      }
     }
-    setIsLoading(false)
   }
 
   return (
