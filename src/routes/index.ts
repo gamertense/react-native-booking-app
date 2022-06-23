@@ -1,4 +1,5 @@
 export type RootStackParamList = {
   Login: undefined
-  Home: undefined
+  RoomSearch: undefined
+  Booking: {roomIds: string[]}
 }

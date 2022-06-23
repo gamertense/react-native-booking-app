@@ -24,9 +24,9 @@ interface AvailableRoomResponse {
   id: string
 }
 
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>
+type RoomSearchProps = NativeStackScreenProps<RootStackParamList, 'RoomSearch'>
 
-function HomeScreen({ navigation }: HomeScreenProps) {
+function RoomSearch({ navigation }: RoomSearchProps) {
   const [numPeople, setNumPeople] = useState(0)
   const [date, setDate] = useState<Date>()
   const [startDateTime, setStartDateTime] = useState<Date>()
@@ -62,7 +62,11 @@ function HomeScreen({ navigation }: HomeScreenProps) {
           { text: 'OK' },
         ])
       console.debug('response data', responseData)
-      // navigation.navigate('')
+
+      const navParams = {
+        roomIds: responseData.map((data) => data.id),
+      }
+      navigation.navigate('Booking', navParams)
     } catch (err: any) {
       console.error(err)
 
@@ -73,7 +77,6 @@ function HomeScreen({ navigation }: HomeScreenProps) {
       }
     }
     setIsLoading(false)
-    navigation.navigate('Home')
   }
 
   return (
@@ -136,4 +139,4 @@ function HomeScreen({ navigation }: HomeScreenProps) {
   )
 }
 
-export default HomeScreen
+export default RoomSearch
