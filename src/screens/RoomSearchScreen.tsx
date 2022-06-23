@@ -2,17 +2,15 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 
 import DateTimePicker from '@react-native-community/datetimepicker'
 import Spinner from 'react-native-loading-spinner-overlay'
-import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
+import { Button, TextInput } from 'react-native-paper'
 import { DATE_TIME_FORMAT } from '../constants/datetime'
 import { BASE_URL } from '../constants/url'
 import { BookingScreenParams, RootStackParamList } from '../routes'
 import { ErrorResponseBody } from '../types/error-response'
-
-const { TextField } = Incubator
 
 interface AvailableRoomResponse {
   id: string
@@ -22,13 +20,13 @@ interface AvailableRoomResponse {
 type RoomSearchProps = NativeStackScreenProps<RootStackParamList, 'RoomSearch'>
 
 function RoomSearch({ navigation }: RoomSearchProps) {
-  const [numPeople, setNumPeople] = useState(0)
+  const [numPeople, setNumPeople] = useState('0')
   const [date, setDate] = useState<Date>(new Date())
-  const [startDateTime, setStartDateTime] = useState<Date>()
-  const [endDateTime, setEndDateTime] = useState<Date>()
+  const [startDateTime, setStartDateTime] = useState(new Date())
+  const [endDateTime, setEndDateTime] = useState(new Date())
   const [isLoading, setIsLoading] = useState(false)
 
-  const onDateChange = (event: any, selectedDate: Date | undefined) => {
+  const onDateChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date
     if (event.type === 'neutralButtonPressed') {
       setDate(new Date(0))
@@ -93,71 +91,94 @@ function RoomSearch({ navigation }: RoomSearchProps) {
   }
 
   return (
-    <View padding-s5>
+    <View style={styles.container}>
       {isLoading && <Spinner visible={isLoading} />}
 
-      <View paddingT-s5></View>
+      <View style={styles.row}>
+        <Text>Number of people</Text>
+        <TextInput
+          testID="numPeopleInput"
+          value={numPeople}
+          onChangeText={(text) => setNumPeople(text)}
+          keyboardType="number-pad"
+          dense
+        />
+      </View>
 
-      <TextField
-        testID="numPeopleInput"
-        placeholder={'Enter number of people'}
-        floatingPlaceholder
-        keyboardType="number-pad"
-        onChangeText={(value) => setNumPeople(parseInt(value))}
-        enableErrors
-        validate={['required']}
-        validationMessage={['Field is required']}
-        autoCapitalize="none"
-      />
-      <DateTimePicker
-        testID="dateInput"
-        value={date}
-        onChange={onDateChange}
-        placeholderText="Select a date"
-      />
-      <DateTimePicker
-        testID="startTimeInput"
-        mode={'time'}
-        value={date}
-        onChange={(event: any, newTime?: Date) => setStartDateTime(newTime)}
-        placeholderText="Select start time"
-      />
-      <DateTimePicker
-        testID="endTimeInput"
-        mode={'time'}
-        value={date}
-        onChange={(event: any, newTime?: Date) => setEndDateTime(newTime)}
-        placeholderText="Select end time"
-      />
-      {/* <DateTimePicker
-        testID="startTime"
-        mode={'time'}
-        // @ts-expect-error
-        title={'Start Time'}
-        placeholder={'Select start time'}
-        onChange={(value: Date) => setStartDateTime(value)}
-        // timeFormat={'h:mm A'}
-        // value={new Date('2015-03-25T12:00:00-06:30')}
-      />
-      <DateTimePicker
-        testID="endTime"
-        mode={'time'}
-        // @ts-expect-error
-        title={'End Time'}
-        placeholder={'Select end time'}
-        onChange={(value: Date) => setEndDateTime(value)}
-        // timeFormat={'h:mm A'}
-        // value={new Date('2015-03-25T12:00:00-06:30')}
-      /> */}
+      <View style={styles.space}></View>
+
+      <View style={styles.row}>
+        <Text style={{ flex: 1 }}>Date</Text>
+        <DateTimePicker
+          testID="dateInput"
+          value={date}
+          onChange={onDateChange}
+          placeholderText="Select a date"
+          style={{ flex: 4 }}
+        />
+      </View>
+
+      <View style={styles.space}></View>
+
+      <View style={styles.row}>
+        <Text style={{ flex: 1 }}>Start time</Text>
+        <DateTimePicker
+          testID="startTimeInput"
+          mode={'time'}
+          value={startDateTime}
+          onChange={(event: any, newTime?: Date) =>
+            setStartDateTime(newTime || startDateTime)
+          }
+          placeholderText="Select start time"
+          style={{ flex: 4 }}
+        />
+      </View>
+
+      <View style={styles.space}></View>
+
+      <View style={styles.row}>
+        <Text>End time</Text>
+        <DateTimePicker
+          testID="endTimeInput"
+          mode={'time'}
+          value={endDateTime}
+          onChange={(event: any, newTime?: Date) =>
+            setEndDateTime(newTime || endDateTime)
+          }
+          placeholderText="Select end time"
+          style={{ flex: 4 }}
+        />
+      </View>
+
+      <View style={styles.space}></View>
+      <View style={styles.space}></View>
+
       <Button
         testID="findRoomBtn"
-        label={'Find Room'}
-        size={Button.sizes.medium}
-        backgroundColor={Colors.green30}
+        mode="contained"
         onPress={handleLogin}
-      />
+        color="green"
+        disabled={parseInt(numPeople) === 0}
+      >
+        Find Room
+      </Button>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    // flex: 1,
+    padding: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  space: {
+    marginTop: 16,
+  },
+})
 
 export default RoomSearch
