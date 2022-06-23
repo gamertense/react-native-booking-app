@@ -57,10 +57,13 @@ function RoomSearch({ navigation }: RoomSearchProps) {
       const { data: responseData } = await axios.get<AvailableRoomResponse[]>(
         `${BASE_URL}/rooms?numPeople=${numPeople}&startDatetime=${startDateStr}&endDatetime=${endDateStr}`
       )
-      if (responseData.length === 0)
+      if (responseData.length === 0) {
         Alert.alert('Sorry', 'There is no available room as of now', [
           { text: 'OK' },
         ])
+        setIsLoading(false)
+        return
+      }
       console.debug('response data', responseData)
 
       const navParams: BookingScreenParams = {
