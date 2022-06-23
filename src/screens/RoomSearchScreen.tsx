@@ -4,14 +4,9 @@ import dayjs from 'dayjs'
 import React, { useState } from 'react'
 import { Alert } from 'react-native'
 
+import DateTimePicker from '@react-native-community/datetimepicker'
 import Spinner from 'react-native-loading-spinner-overlay'
-import {
-  Button,
-  Colors,
-  DateTimePicker,
-  Incubator,
-  View,
-} from 'react-native-ui-lib' //eslint-disable-line
+import { Button, Colors, Incubator, View } from 'react-native-ui-lib' //eslint-disable-line
 import { DATE_TIME_FORMAT } from '../constants/datetime'
 import { BASE_URL } from '../constants/url'
 import { BookingScreenParams, RootStackParamList } from '../routes'
@@ -28,12 +23,21 @@ type RoomSearchProps = NativeStackScreenProps<RootStackParamList, 'RoomSearch'>
 
 function RoomSearch({ navigation }: RoomSearchProps) {
   const [numPeople, setNumPeople] = useState(0)
-  const [date, setDate] = useState<Date>()
+  const [date, setDate] = useState<Date>(new Date())
   const [startDateTime, setStartDateTime] = useState<Date>()
   const [endDateTime, setEndDateTime] = useState<Date>()
   const [isLoading, setIsLoading] = useState(false)
 
-  async function handleLogin() {
+  const onDateChange = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || date
+    if (event.type === 'neutralButtonPressed') {
+      setDate(new Date(0))
+    } else {
+      setDate(currentDate)
+    }
+  }
+
+  const handleLogin = async () => {
     setIsLoading(true)
 
     try {
@@ -74,6 +78,7 @@ function RoomSearch({ navigation }: RoomSearchProps) {
         }),
       }
       console.debug('navigate to booking with params', navParams)
+
       navigation.navigate('Booking', navParams)
     } catch (err: any) {
       console.error(err)
@@ -106,15 +111,25 @@ function RoomSearch({ navigation }: RoomSearchProps) {
       />
       <DateTimePicker
         testID="dateInput"
-        // @ts-expect-error
-        containerStyle={{ marginVertical: 20 }}
-        title={'Date'}
-        placeholder={'Select a date'}
-        onChange={(value: Date) => setDate(value)}
-        // dateFormat={'MMM D, YYYY'}
-        // value={new Date('October 13, 2014')}
+        value={date}
+        onChange={onDateChange}
+        placeholderText="Select a date"
       />
       <DateTimePicker
+        testID="startTimeInput"
+        mode={'time'}
+        value={date}
+        onChange={(event: any, newTime?: Date) => setStartDateTime(newTime)}
+        placeholderText="Select start time"
+      />
+      <DateTimePicker
+        testID="endTimeInput"
+        mode={'time'}
+        value={date}
+        onChange={(event: any, newTime?: Date) => setEndDateTime(newTime)}
+        placeholderText="Select end time"
+      />
+      {/* <DateTimePicker
         testID="startTime"
         mode={'time'}
         // @ts-expect-error
@@ -133,7 +148,7 @@ function RoomSearch({ navigation }: RoomSearchProps) {
         onChange={(value: Date) => setEndDateTime(value)}
         // timeFormat={'h:mm A'}
         // value={new Date('2015-03-25T12:00:00-06:30')}
-      />
+      /> */}
       <Button
         testID="findRoomBtn"
         label={'Find Room'}
