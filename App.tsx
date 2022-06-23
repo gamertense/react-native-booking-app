@@ -12,7 +12,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import { RootStackParamList } from './src/routes'
-import { LoginScreen, RoomSearchScreen } from './src/screens'
+import { BookingScreen, LoginScreen, RoomSearchScreen } from './src/screens'
 
 const RootStack = createStackNavigator<RootStackParamList>()
 
@@ -24,7 +24,12 @@ const App = () => {
         <RootStack.Screen
           name="RoomSearch"
           component={RoomSearchScreen}
-          options={{ title: 'Room Booking' }}
+          options={{ title: 'Make My Booking' }}
+        />
+        <RootStack.Screen
+          name="Booking"
+          component={BookingScreen}
+          options={{ title: 'Select Meeting Room' }}
         />
       </RootStack.Navigator>
     </NavigationContainer>

@@ -38,7 +38,7 @@ function LoginScreen({ navigation }: LoginScreenProps) {
       }
     }
     setIsLoading(false)
-    navigation.navigate('Home')
+    navigation.navigate('RoomSearch')
   }
 
   return (

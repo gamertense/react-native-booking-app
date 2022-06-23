@@ -10,18 +10,18 @@ import {
   Colors,
   DateTimePicker,
   Incubator,
-  Text,
   View,
 } from 'react-native-ui-lib' //eslint-disable-line
 import { DATE_TIME_FORMAT } from '../constants/datetime'
 import { BASE_URL } from '../constants/url'
-import { RootStackParamList } from '../routes'
+import { BookingScreenParams, RootStackParamList } from '../routes'
 import { ErrorResponseBody } from '../types/error-response'
 
 const { TextField } = Incubator
 
 interface AvailableRoomResponse {
   id: string
+  capacity: number
 }
 
 type RoomSearchProps = NativeStackScreenProps<RootStackParamList, 'RoomSearch'>
@@ -63,9 +63,14 @@ function RoomSearch({ navigation }: RoomSearchProps) {
         ])
       console.debug('response data', responseData)
 
-      const navParams = {
-        roomIds: responseData.map((data) => data.id),
+      const navParams: BookingScreenParams = {
+        startDate: startDateStr,
+        endDate: endDateStr,
+        rooms: responseData.map((data) => {
+          return { id: data.id, capacity: data.capacity }
+        }),
       }
+      console.debug('navigate to booking with params', navParams)
       navigation.navigate('Booking', navParams)
     } catch (err: any) {
       console.error(err)
@@ -82,8 +87,6 @@ function RoomSearch({ navigation }: RoomSearchProps) {
   return (
     <View padding-s5>
       {isLoading && <Spinner visible={isLoading} />}
-
-      <Text text60>Fill in details</Text>
 
       <View paddingT-s5></View>
 
@@ -130,7 +133,7 @@ function RoomSearch({ navigation }: RoomSearchProps) {
       />
       <Button
         testID="findRoomBtn"
-        label={'Find'}
+        label={'Find Room'}
         size={Button.sizes.medium}
         backgroundColor={Colors.green30}
         onPress={handleLogin}
