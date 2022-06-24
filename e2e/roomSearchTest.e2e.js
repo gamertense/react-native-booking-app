@@ -47,7 +47,6 @@ describe('Booking flow', () => {
         'yyyy-MM-dd'
       )
 
-      // Input not set
       console.log('Start time: ', tomorrowDate.format(TIME_FORMAT))
       await getElementById('startTimeInput').setDatePickerDate(
         tomorrowDate.format(TIME_FORMAT),
