@@ -19,6 +19,7 @@ target 'bookingapp' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+
   target 'bookingappTests' do
     inherit! :complete
     # Pods for testing
